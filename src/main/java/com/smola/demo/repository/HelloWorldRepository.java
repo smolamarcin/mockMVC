@@ -4,7 +4,6 @@ import com.smola.demo.model.Content;
 import com.smola.demo.model.Greeting;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

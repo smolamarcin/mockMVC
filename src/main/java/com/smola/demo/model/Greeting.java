@@ -1,8 +1,6 @@
 package com.smola.demo.model;
 
 
-import org.springframework.transaction.annotation.Transactional;
-
 public class Greeting {
     private long id;
     private Content content;

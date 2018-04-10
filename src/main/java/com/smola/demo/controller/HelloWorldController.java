@@ -11,30 +11,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/greetings")
 public class HelloWorldController {
     @Autowired
     private HelloWorldService helloWorldService;
 
-    @GetMapping("/greetings")
+    @GetMapping
     @ResponseBody
     public List<Greeting> getAll() {
         List<Greeting> greetings = helloWorldService.getAll();
         return greetings;
     }
 
-    @PostMapping("/greetings")
+    @PostMapping()
     public ResponseEntity<Greeting> addGreeting(@RequestBody Greeting greeting) {
         helloWorldService.addGreeting(greeting);
         return new ResponseEntity<>(greeting, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/greetings/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSingleGreeting(@PathVariable Long id) {
         return helloWorldService.deleteById(id);
 
     }
 
-    @PutMapping("/greetings/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateGreeting(@PathVariable Long id,
                                             @RequestBody Greeting greetingDetails) {
         return helloWorldService.update(id, greetingDetails);
