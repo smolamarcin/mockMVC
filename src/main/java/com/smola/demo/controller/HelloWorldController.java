@@ -1,6 +1,5 @@
 package com.smola.demo.controller;
 
-import com.smola.demo.model.Content;
 import com.smola.demo.model.Greeting;
 import com.smola.demo.service.HelloWorldService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,24 +9,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 public class HelloWorldController {
     @Autowired
     private HelloWorldService helloWorldService;
 
-//    @PostMapping("/hello-world")
-//    @ResponseBody
-//    public ResponseEntity<Greeting> sayHello(@PathVariable(name = "name", required = false, defaultValue = "World!") String name) {
-//        helloWorldService.addGreeting(name);
-//
-//    }
-
-    @GetMapping("/hello-world/all")
+    @GetMapping("/greetings")
     @ResponseBody
     public List<Greeting> getAll() {
         List<Greeting> greetings = helloWorldService.getAll();
         return greetings;
     }
+
+    @PostMapping("/greetings")
+    public ResponseEntity<Greeting> addGreeting(@RequestBody Greeting greeting) {
+        helloWorldService.addGreeting(greeting);
+        return new ResponseEntity<>(greeting, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/greetings/{id}")
+    public ResponseEntity<?> deleteSingleGreeting(@PathVariable Long id) {
+        return helloWorldService.deleteById(id);
+
+    }
+
+    @PutMapping("/greetings/{id}")
+    public ResponseEntity<?> updateGreeting(@PathVariable Long id,
+                                            @RequestBody Greeting greetingDetails) {
+        return helloWorldService.update(id, greetingDetails);
+
+    }
+
 }

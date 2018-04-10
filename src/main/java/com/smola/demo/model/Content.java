@@ -1,15 +1,22 @@
 package com.smola.demo.model;
 
-import java.io.Serializable;
 
 public class Content  {
     private String text;
+
+    public Content() {
+    }
 
     public Content(String text) {
         this.text = text;
     }
 
     public String getText() {
+        return text;
+    }
+
+    @Override
+    public String toString() {
         return text;
     }
 }
