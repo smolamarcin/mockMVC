@@ -72,6 +72,7 @@ public class LibraryControllerTest {
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
+
         //when - then
         this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON))
                 .andExpect(status().isCreated());
@@ -84,6 +85,7 @@ public class LibraryControllerTest {
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
+
         //when
         this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON));
 
@@ -100,7 +102,7 @@ public class LibraryControllerTest {
         //given
         int idToGet = 1;
         String endPointToGetBookById = String.format(endPoint + "/%s", idToGet);
-        //when
+
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
@@ -113,6 +115,18 @@ public class LibraryControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)))
                 .andDo(print());
+    }
+
+    @Test
+    public void should_ReturnHttp404_whenNotFoundById() throws Exception {
+        //given
+        int nonExistingBookId = 999;
+        String endPointToGetBookById = String.format(endPoint + "/%s", nonExistingBookId);
+
+        //when - then
+        this.mockMvc.perform(get(endPointToGetBookById))
+                .andExpect(status().isNotFound());
+
     }
 
     private Book createSampleBook() {
