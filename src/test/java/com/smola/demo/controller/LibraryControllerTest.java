@@ -100,18 +100,19 @@ public class LibraryControllerTest {
         //given
         int idToGet = 1;
         String endPointToGetBookById = String.format(endPoint + "/%s", idToGet);
-
         //when
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
+
         //when
         this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON));
 
         //then
         this.mockMvc.perform(get(endPointToGetBookById))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].author.name", is(SAMPLE_AUTHOR_NAME)));
+                .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)))
+                .andDo(print());
     }
 
     private Book createSampleBook() {
