@@ -20,6 +20,10 @@ public class Book {
     public Book() {
     }
 
+    public long getId() {
+        return id;
+    }
+
     private Book(BookBuilder bookBuilder) {
         this.isbn = bookBuilder.isbn;
         this.tittle = bookBuilder.tittle;
@@ -57,4 +61,5 @@ public class Book {
             return new Book(this);
         }
     }
+
 }

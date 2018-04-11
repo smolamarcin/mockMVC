@@ -14,20 +14,8 @@ public class Tittle {
     public Tittle() {
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getTittle() {
         return tittle;
-    }
-
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
     }
 
     public Tittle(String tittle) {

@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 public class LibraryControllerTest {
     private MockMvc mockMvc;
-
+    private static final String endPoint = "/library/books";
     @Autowired
     private LibraryService libraryService;
 
@@ -55,16 +55,15 @@ public class LibraryControllerTest {
     }
 
     @Test
-    public void shouldReturnHttp200_whenGetOnAllBooks() throws Exception {
+    public void should_ReturnHttp200_whenGetOnAllBooks() throws Exception {
         String endPoint = "/library/books";
         this.mockMvc.perform(get(endPoint))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldReturnHttp201_whenPostNewBook() throws Exception {
+    public void should_ReturnHttp201_whenPostNewBook() throws Exception {
         //given
-        String endPoint = "/library/books";
         Author author = new Author("Adam Mickiewicz");
         Tittle tittle = new Tittle("Pan Tadeusz");
         ISBN isbn = new ISBN("978-1-56619-909-4 ");
@@ -79,9 +78,8 @@ public class LibraryControllerTest {
     }
 
     @Test
-    public void shouldAddBookToRepository_whenPostNewBook() throws Exception {
+    public void should_AddBookToRepository_whenPostNewBook() throws Exception {
         //given
-        String endPoint = "/library/books";
         Author author = new Author("Adam Mickiewicz");
         Tittle tittle = new Tittle("Pan Tadeusz");
         ISBN isbn = new ISBN("978-1-56619-909-4 ");
@@ -96,5 +94,12 @@ public class LibraryControllerTest {
         this.mockMvc.perform(get(endPoint))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void should_ReturnBook_whenGetById(){
+        //given
+        int idToDelete = 0;
+//        String endPointToGetBookById = String.format(endPoint+"/%s",);
     }
 }
