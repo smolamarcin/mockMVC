@@ -7,39 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class HelloWorldService {
 
     @Autowired
     private HelloWorldRepository helloWorldRepository;
 
-    public List<Greeting> getAll() {
-        return helloWorldRepository.getAll();
+    public Iterable<Greeting> getAll() {
+        return helloWorldRepository.findAll();
     }
 
 
     public Greeting addGreeting(Greeting greeting) {
-        return helloWorldRepository.addGreeting(greeting);
+        return helloWorldRepository.save(greeting);
     }
 
-    public ResponseEntity deleteById(Long id) {
-        ResponseEntity responseEntity = ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("This ID does not exist!");
-        if (helloWorldRepository.deleteById(id)) {
-            responseEntity = ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body("Successfully deleted! Id: " + id);
-        }
-        return responseEntity;
 
-    }
-
-    public ResponseEntity<?> update(Long id, Greeting greetingDetails) {
-        helloWorldRepository.updateById(id, greetingDetails);
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
 }

@@ -6,10 +6,7 @@
 	<groupId>com.smola</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-    <modules>
-        <module>client</module>
-    </modules>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -25,6 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<start-class>com.smola.demo.DemoApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -78,6 +76,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+				<execution>
+					<id>pre-integration-test</id>
+					<goals>
+						<goal>start</goal>
+					</goals>
+				</execution>
+				<execution>
+					<id>post-integration-test</id>
+					<goals>
+						<goal>stop</goal>
+					</goals>
+				</execution>
+			</executions>
 			</plugin>
 		</plugins>
 	</build>

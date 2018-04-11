@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/greetings")
 public class HelloWorldController {
@@ -18,8 +16,8 @@ public class HelloWorldController {
 
     @GetMapping
     @ResponseBody
-    public List<Greeting> getAll() {
-        List<Greeting> greetings = helloWorldService.getAll();
+    public Iterable<Greeting> getAll() {
+        Iterable<Greeting> greetings = helloWorldService.getAll();
         return greetings;
     }
 
@@ -29,17 +27,6 @@ public class HelloWorldController {
         return new ResponseEntity<>(greeting, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSingleGreeting(@PathVariable Long id) {
-        return helloWorldService.deleteById(id);
 
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateGreeting(@PathVariable Long id,
-                                            @RequestBody Greeting greetingDetails) {
-        return helloWorldService.update(id, greetingDetails);
-
-    }
 
 }

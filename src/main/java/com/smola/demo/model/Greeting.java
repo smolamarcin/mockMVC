@@ -1,11 +1,24 @@
 package com.smola.demo.model;
 
+import javax.persistence.*;
 
+@Entity(name = "Greeting")
+@Table(name = "greeting")
 public class Greeting {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "content_id")
     private Content content;
 
     public Greeting() {
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setContent(Content content) {
