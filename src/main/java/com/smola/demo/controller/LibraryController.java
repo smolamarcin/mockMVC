@@ -26,7 +26,7 @@ public class LibraryController {
     }
 
     @PostMapping("/books")
-    ResponseEntity addBook(@RequestBody Book book) {
+    ResponseEntity<Book> addBook(@RequestBody Book book) {
         Book toAdd = libraryService.addBook(book);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(toAdd);

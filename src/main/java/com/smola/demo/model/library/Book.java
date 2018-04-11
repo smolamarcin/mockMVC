@@ -1,14 +1,20 @@
 package com.smola.demo.model.library;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "isbn_id")
     private ISBN isbn;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tittle_id")
     private Tittle tittle;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     public Book() {

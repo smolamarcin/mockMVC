@@ -5,7 +5,7 @@ import com.smola.demo.model.library.Author;
 import com.smola.demo.model.library.Book;
 import com.smola.demo.model.library.ISBN;
 import com.smola.demo.model.library.Tittle;
-import com.smola.demo.repository.LibraryRepository;
+import com.smola.demo.repository.BookRepository;
 import com.smola.demo.service.LibraryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class LibraryControllerTest {
     private LibraryService libraryService;
 
     @Autowired
-    private LibraryRepository libraryRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
