@@ -13,10 +13,12 @@ public class LibraryService {
     private LibraryRepository libraryRepository;
 
     public Book addBook(Book book) {
-        return libraryRepository.save(book);
+//        return libraryRepository.save(book);
+        return null;
     }
 
     public Collection<Book> getAllBooks() {
-        return libraryRepository.findAll();
+//        return libraryRepository.findAll();
+        return null;
     }
 }

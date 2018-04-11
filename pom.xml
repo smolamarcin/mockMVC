@@ -71,13 +71,6 @@
 			<version>2.8.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.0.0.RELEASE</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
