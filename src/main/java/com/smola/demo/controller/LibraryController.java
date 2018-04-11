@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collection;
-
 @Controller
 @RequestMapping("/library")
 public class LibraryController {
@@ -21,8 +19,8 @@ public class LibraryController {
     private LibraryService libraryService;
 
     @GetMapping("/books")
-    Collection<Book> getAllBooks() {
-        return libraryService.getAllBooks();
+    ResponseEntity<Iterable<Book>> getAllBooks() {
+        return ResponseEntity.status(HttpStatus.OK).body(libraryService.getAllBooks());
     }
 
     @PostMapping("/books")
