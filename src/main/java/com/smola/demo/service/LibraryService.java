@@ -1,6 +1,5 @@
 package com.smola.demo.service;
 
-import com.smola.demo.model.library.Author;
 import com.smola.demo.model.library.Book;
 import com.smola.demo.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +14,20 @@ public class LibraryService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Book addBook(Book book) {
-        return bookRepository.save(book);
+    public ResponseEntity<Book> addBook(Book book) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(bookRepository.save(book));
     }
 
     public Iterable<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public ResponseEntity<Book> findByAuthor(String author) {
-        Optional<Book> bookToFind = bookRepository.findByAuthor_Name(author);
+    public ResponseEntity<Book> findByAuthor(String authorName) {
+        Optional<Book> bookToFind = bookRepository.findByAuthor_Name(authorName);
         if (bookToFind.isPresent()) {
             return ResponseEntity.status(HttpStatus.FOUND)
-                    .body(bookRepository.findByAuthor_Name(author).get());
+                    .body(bookRepository.findByAuthor_Name(authorName).get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

@@ -22,13 +22,11 @@ public class LibraryController {
 
     @PostMapping("/books")
     ResponseEntity<Book> addBook(@RequestBody Book book) {
-        Book toAdd = libraryService.addBook(book);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(toAdd);
+        return libraryService.addBook(book);
     }
 
-    @GetMapping("/books/{name}")
-    ResponseEntity<Book> getBookByAuthor(@PathVariable String name){
-        return libraryService.findByAuthor(name);
+    @GetMapping("/books/{authorName}")
+    ResponseEntity<Book> getBookByAuthor(@PathVariable String authorName){
+        return libraryService.findByAuthor(authorName);
     }
 }
