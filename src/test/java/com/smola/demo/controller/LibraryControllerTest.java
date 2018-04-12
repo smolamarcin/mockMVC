@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LibraryControllerTest {
@@ -40,7 +42,10 @@ public class LibraryControllerTest {
     private static final String SAMPLE_AUTHOR_NAME = "Adam Mickiewicz";
     private static final String SAMPLE_BOOK_TITTLE = "Pan Tadeusz";
     private static final String SAMPLE_BOOK_ISBN = "978-1-56619-909-4";
+
+    @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private LibraryService libraryService;
 
@@ -53,12 +58,6 @@ public class LibraryControllerTest {
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
-
-
-    @Before
-    public void setUp() {
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    }
 
     @Test
     public void should_ReturnHttp200_whenGetOnAllBooks() throws Exception {
@@ -76,7 +75,6 @@ public class LibraryControllerTest {
         //when - then
         this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON))
                 .andExpect(status().isCreated());
-        this.mockMvc.perform(get(endPoint)).andDo(print());
     }
 
     @Test
@@ -113,8 +111,7 @@ public class LibraryControllerTest {
         //then
         this.mockMvc.perform(get(endPointToGetBookById))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)))
-                .andDo(print());
+                .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
     }
 
     @Test
