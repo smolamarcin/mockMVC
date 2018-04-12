@@ -20,7 +20,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -106,9 +105,19 @@ public class LibraryControllerTest {
         this.mockMvc.perform(post(END_POINT).contentType(contentType).content(bookToAddJSON));
 
         //then
-        this.mockMvc.perform(get("/library/books/Adam"))
+        this.mockMvc.perform(get(END_POINT + "{name}", SAMPLE_AUTHOR_NAME))
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
+    }
+
+    @Test
+    public void shouldReturn_http404_whenBookNotFound_byAuthorName() throws Exception {
+        //given
+        String nonExistingAuthor = "Im a non existing author!";
+
+        //when - then
+        this.mockMvc.perform(get(END_POINT+"{name}",nonExistingAuthor))
+                .andExpect(status().isNotFound());
     }
 
     private Book createSampleBook() {

@@ -23,15 +23,13 @@ public class LibraryService {
         return bookRepository.findAll();
     }
 
-    public ResponseEntity<Book> findByAuthor(String authorName) {
-        Author author = new Author(authorName);
-        Optional<Book> bookToFind = bookRepository.findByAuthor(author);
+    public ResponseEntity<Book> findByAuthor(String author) {
+        Optional<Book> bookToFind = bookRepository.findByAuthor_Name(author);
         if (bookToFind.isPresent()) {
             return ResponseEntity.status(HttpStatus.FOUND)
-                    .body(bookRepository.findByAuthor(author).get());
+                    .body(bookRepository.findByAuthor_Name(author).get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(bookRepository.findByAuthor(author).get());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }

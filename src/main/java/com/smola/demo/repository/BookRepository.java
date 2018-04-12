@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
-    Optional<Book> findByAuthor(Author author);
+    Optional<Book> findByAuthor_Name(String name);
 }
