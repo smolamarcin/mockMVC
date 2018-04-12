@@ -21,22 +21,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.charset.Charset;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @WebAppConfiguration
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class LibraryControllerTest {
     private static final String endPoint = "/library/books";
     private static final String SAMPLE_AUTHOR_NAME = "Adam Mickiewicz";
@@ -56,8 +51,18 @@ public class LibraryControllerTest {
     private WebApplicationContext webApplicationContext;
 
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
+            MediaType.APPLICATION_JSON.getSubtype());
+
+    @Before
+    public void setUp() {
+        fillDbWithDummyData();
+    }
+
+
+    @After
+    public void tearDown() {
+        bookRepository.deleteAll();
+    }
 
     @Test
     public void should_ReturnHttp200_whenGetOnAllBooks() throws Exception {
@@ -84,23 +89,18 @@ public class LibraryControllerTest {
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
 
-        //when
-        this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON));
+        //when - then
+        this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
 
-        //then
-        this.mockMvc.perform(get(endPoint))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].author.name", is(SAMPLE_AUTHOR_NAME)))
-                .andExpect(jsonPath("$", hasSize(1)));
+
     }
 
     @Test
-    public void should_ReturnBook_whenGetById() throws Exception {
+    public void should_ReturnBook_whenGetByAuthor() throws Exception {
         //given
-        int idToGet = 1;
-        String endPointToGetBookById = String.format(endPoint + "/%s", idToGet);
-
+        String authorToFind = SAMPLE_AUTHOR_NAME;
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
@@ -109,21 +109,10 @@ public class LibraryControllerTest {
         this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON));
 
         //then
-        this.mockMvc.perform(get(endPointToGetBookById))
+        this.mockMvc.perform(get(authorToFind)
+                .param("authorr", authorToFind))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
-    }
-
-    @Test
-    public void should_ReturnHttp404_whenNotFoundById() throws Exception {
-        //given
-        int nonExistingBookId = 999;
-        String endPointToGetBookById = String.format(endPoint + "/%s", nonExistingBookId);
-
-        //when - then
-        this.mockMvc.perform(get(endPointToGetBookById))
-                .andExpect(status().isNotFound());
-
     }
 
     private Book createSampleBook() {
@@ -132,4 +121,20 @@ public class LibraryControllerTest {
         ISBN isbn = new ISBN(SAMPLE_BOOK_ISBN);
         return new Book.BookBuilder(author, tittle).setIsbn(isbn).build();
     }
+
+    private void fillDbWithDummyData() {
+        Author sienkiewicz = new Author("Henryk Sienkiewicz");
+        Tittle tittleQuoVadis = new Tittle("Quo Vadis");
+        ISBN isbnQuoVadis = new ISBN("978-1-56619-909-5");
+        Book quoVadis = new Book.BookBuilder(sienkiewicz, tittleQuoVadis).setIsbn(isbnQuoVadis).build();
+        bookRepository.save(quoVadis);
+
+        Author reymont = new Author("Wladyslaw Reymont");
+        Tittle tittleChlopi = new Tittle("Chlopi");
+        ISBN isbnChlopi = new ISBN("978-1-56619-909-5");
+        Book chlopi = new Book.BookBuilder(reymont, tittleChlopi).setIsbn(isbnChlopi).build();
+        bookRepository.save(chlopi);
+    }
+
+
 }
