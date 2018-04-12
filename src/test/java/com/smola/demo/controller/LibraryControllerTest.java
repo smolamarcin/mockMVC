@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WebAppConfiguration
 public class LibraryControllerTest {
-    private static final String endPoint = "/library/books";
+    private static final String END_POINT = "/library/books/";
     private static final String SAMPLE_AUTHOR_NAME = "Adam Mickiewicz";
     private static final String SAMPLE_BOOK_TITTLE = "Pan Tadeusz";
     private static final String SAMPLE_BOOK_ISBN = "978-1-56619-909-4";
@@ -58,7 +57,6 @@ public class LibraryControllerTest {
         fillDbWithDummyData();
     }
 
-
     @After
     public void tearDown() {
         bookRepository.deleteAll();
@@ -66,7 +64,7 @@ public class LibraryControllerTest {
 
     @Test
     public void should_ReturnHttp200_whenGetOnAllBooks() throws Exception {
-        this.mockMvc.perform(get(endPoint))
+        this.mockMvc.perform(get(END_POINT))
                 .andExpect(status().isOk());
     }
 
@@ -78,7 +76,7 @@ public class LibraryControllerTest {
         String bookToAddJSON = gson.toJson(bookToAdd);
 
         //when - then
-        this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON))
+        this.mockMvc.perform(post(END_POINT).contentType(contentType).content(bookToAddJSON))
                 .andExpect(status().isCreated());
     }
 
@@ -90,7 +88,7 @@ public class LibraryControllerTest {
         String bookToAddJSON = gson.toJson(bookToAdd);
 
         //when - then
-        this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON))
+        this.mockMvc.perform(post(END_POINT).contentType(contentType).content(bookToAddJSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
 
@@ -100,18 +98,16 @@ public class LibraryControllerTest {
     @Test
     public void should_ReturnBook_whenGetByAuthor() throws Exception {
         //given
-        String authorToFind = SAMPLE_AUTHOR_NAME;
         Book bookToAdd = createSampleBook();
         Gson gson = new Gson();
         String bookToAddJSON = gson.toJson(bookToAdd);
 
         //when
-        this.mockMvc.perform(post(endPoint).contentType(contentType).content(bookToAddJSON));
+        this.mockMvc.perform(post(END_POINT).contentType(contentType).content(bookToAddJSON));
 
         //then
-        this.mockMvc.perform(get(authorToFind)
-                .param("authorr", authorToFind))
-                .andExpect(status().isOk())
+        this.mockMvc.perform(get("/library/books/Adam"))
+                .andExpect(status().isFound())
                 .andExpect(jsonPath("$.author.name", is(SAMPLE_AUTHOR_NAME)));
     }
 

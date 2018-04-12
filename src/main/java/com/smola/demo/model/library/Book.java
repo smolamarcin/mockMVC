@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "isbn_id")
     private ISBN isbn;
@@ -20,9 +20,10 @@ public class Book {
     public Book() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
+
 
     private Book(BookBuilder bookBuilder) {
         this.isbn = bookBuilder.isbn;

@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/library")
 public class LibraryController {
@@ -29,10 +27,8 @@ public class LibraryController {
                 .body(toAdd);
     }
 
-    @GetMapping("/books/{id}")
-    ResponseEntity<Book> getBookById(@PathVariable long id){
-        Optional<Book> foundBook = libraryService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(foundBook.get());
+    @GetMapping("/books/{name}")
+    ResponseEntity<Book> getBookByAuthor(@PathVariable String name){
+        return libraryService.findByAuthor(name);
     }
 }

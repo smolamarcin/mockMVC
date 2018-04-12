@@ -7,7 +7,7 @@ public class Tittle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tittle_id")
-    private long id;
+    private Long id;
 
     private String tittle;
 
